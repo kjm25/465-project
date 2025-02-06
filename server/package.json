@@ -1,5 +1,10 @@
 {
   "dependencies": {
     "express": "^4.21.2"
+  },
+  "scripts": {
+    "build-client": "cd ../client && npm i && npm run build",
+    "pre-build": "npm i && npm run build-client",
+    "start": "node server.js"
   }
 }
