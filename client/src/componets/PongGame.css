@@ -1,5 +1,6 @@
 .outerbox {
-  border: 1px solid black;
+  border: 2px solid black;
+  box-sizing: border-box;
   background-color: white;
   color: black;
   height: 50vw;
@@ -7,7 +8,18 @@
 }
 
 .player {
-  background-color: red;
   height: 15%;
   width: 3%;
+}
+
+.red-player {
+  background-color: red;
+  position: relative;
+  float: left;
+}
+
+.blue-player {
+  background-color: blue;
+  position: relative;
+  float: right;
 }

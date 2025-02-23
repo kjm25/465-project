@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./PongGame.css";
 
 function PongGame() {
@@ -10,16 +10,22 @@ function PongGame() {
         <h2>Score: 0 - 0</h2>
       </div>
       <div className="outerbox">
-        <PongPlayer></PongPlayer>
+        <PongPlayer side="blue-player" height={50}></PongPlayer>
+        <PongPlayer side="red-player" height={100}></PongPlayer>
       </div>
     </>
   );
 }
 
-function PongPlayer() {
+function PongPlayer({ side, height }) {
+  useEffect(() => {
+    const ele = document.querySelector(`#${side}`);
+    ele.style.top = `${height}px`;
+  }, [height]);
+
   return (
     <>
-      <div className="player"></div>
+      <div className={`player ${side}`} id={side}></div>
     </>
   );
 }
