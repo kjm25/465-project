@@ -23,3 +23,12 @@
   position: relative;
   float: right;
 }
+
+.pong-ball {
+  background-color: green;
+  position: relative;
+  height: 4%;
+  width: 3%;
+  top: 50%;
+  left: 50%;
+}
