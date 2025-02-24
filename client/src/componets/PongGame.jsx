@@ -2,17 +2,52 @@ import { useEffect, useState } from "react";
 import "./PongGame.css";
 
 function PongGame() {
-  const [count, setCount] = useState(0);
+  const [redPos, setRedPos] = useState(50);
+  const [bluePos, setBluePos] = useState(50);
+  const [ballPos, setBallPos] = useState([50, 50]);
+  const [score, setScore] = useState([0, 0]);
+  const [red, setRed] = useState(false);
+
+  useEffect(() => {
+    let setPos;
+    if (red) {
+      setPos = setRedPos;
+    } else {
+      setPos = setBluePos;
+    }
+
+    const handleUp = (event) => {
+      if (event.key === "ArrowUp") {
+        setPos((prevPos) => Math.max(prevPos - 5, 0));
+      }
+    };
+
+    const handleDown = (event) => {
+      if (event.key === "ArrowDown") {
+        setPos((prevPos) => Math.min(prevPos + 5, 100));
+      }
+    };
+
+    document.addEventListener("keydown", handleUp);
+    document.addEventListener("keydown", handleDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleUp);
+      document.removeEventListener("keydown", handleDown);
+    };
+  }, []);
 
   return (
     <>
       <div className="scoreboard">
-        <h2>Score: 0 - 0</h2>
+        <h2>
+          Score: {score[0]} - {score[1]}
+        </h2>
       </div>
       <div className="outerbox">
-        <PongPlayer side="blue-player" height={50}></PongPlayer>
-        <PongBall Xpos={100} Ypos={100}></PongBall>
-        <PongPlayer side="red-player" height={10}></PongPlayer>
+        <PongPlayer side="blue-player" height={bluePos}></PongPlayer>
+        <PongPlayer side="red-player" height={redPos}></PongPlayer>
+        <PongBall Xpos={ballPos[0]} Ypos={ballPos[1]}></PongBall>
       </div>
     </>
   );
