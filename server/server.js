@@ -25,7 +25,14 @@ app.get("/pong", (req, res) => {
 io.on("connection", (socket) => {
   console.log(`client with socket id ${socket.id} connected`);
 
-  socket.emit("hello", "");
+  const roomName = "test_room"; // TODO change to room code sent by client once implemented
+  socket.join(roomName);
+
+  socket.to(roomName).emit("color", "red");
+
+  //simply emit actions to the other client - will want game logic on server eventually to have ground truth
+  socket.on("pongUp", () => socket.to(roomName).emit("pongUp"));
+  socket.on("pongDown", () => socket.to(roomName).emit("pongDown"));
 
   socket.on("disconnect", () => {
     console.log(`client with socket id ${socket.id} disconnected`);

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./PongGame.css";
+import { socket } from "../socket.js";
 
 function PongGame() {
   const [redPos, setRedPos] = useState(50);
@@ -7,6 +8,9 @@ function PongGame() {
   const [ballPos, setBallPos] = useState([25, 50, 1, 1]); // xPos, yPos, xVel, yVel
   const [score, setScore] = useState([0, 0]);
   const [red, setRed] = useState(false);
+
+  const moveUp = (prevPos) => Math.max(prevPos - 5, 0);
+  const moveDown = (prevPos) => Math.min(prevPos + 5, 100);
 
   useEffect(() => {
     let setPos;
@@ -18,13 +22,15 @@ function PongGame() {
 
     const handleUp = (event) => {
       if (event.key === "ArrowUp") {
-        setPos((prevPos) => Math.max(prevPos - 5, 0));
+        setPos(moveUp);
+        socket.emit("pongUp");
       }
     };
 
     const handleDown = (event) => {
       if (event.key === "ArrowDown") {
-        setPos((prevPos) => Math.min(prevPos + 5, 100));
+        setPos(moveDown);
+        socket.emit("pongDown");
       }
     };
 
@@ -76,12 +82,13 @@ function PongGame() {
   }, [bluePos, redPos]);
 
   useEffect(() => {
+    //SetBallPosition to its new place based on velocity. First check if someone has won.
     setBallPos((prevBall) => {
       if (prevBall[0] < 0) {
         // red wins
         setScore((prevScore) => {
           const newScore = [...prevScore];
-          newScore[0] += 0.5; //bug this gets run twice - quick fix
+          newScore[0] += 1; //bug this gets run twice - in strict mode
           return newScore;
         });
         return [25, 50, 1, prevBall[3]];
@@ -89,7 +96,7 @@ function PongGame() {
         // blue wins
         setScore((prevScore) => {
           const newScore = [...prevScore];
-          newScore[1] += 0.5;
+          newScore[1] += 1;
           return newScore;
         });
         return [25, 50, -1, prevBall[3]];
@@ -97,6 +104,35 @@ function PongGame() {
       return prevBall;
     });
   }, [ballPos]);
+
+  //set up socket.io in use effect for componet mounting
+  useEffect(() => {
+    socket.on("color", (side) => {
+      if (side === "red") setRed(true);
+      else setRed(false);
+    });
+
+    socket.on("color", (side) => {
+      if (side === "red") setRed(true);
+      else setRed(false);
+    });
+
+    socket.on("pongDown", () => {
+      if (red) setBluePos(moveDown);
+      else setRedPos(moveDown);
+    });
+
+    socket.on("pongUp", () => {
+      if (red) setBluePos(moveUp);
+      else setRedPos(moveUp);
+    });
+
+    return () => {
+      socket.removeAllListeners("color");
+      socket.removeAllListeners("pongDown");
+      socket.removeAllListeners("Up");
+    };
+  }, [red]);
 
   return (
     <>
