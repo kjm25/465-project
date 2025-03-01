@@ -5,7 +5,7 @@ import { socket } from "../socket.js";
 function PongGame() {
   const [redPos, setRedPos] = useState(50);
   const [bluePos, setBluePos] = useState(50);
-  const [ballPos, setBallPos] = useState([25, 50, 1, 1]); // xPos, yPos, xVel, yVel
+  const [ballPos, setBallPos] = useState([50, 50, 0, 0]); // xPos, yPos, xVel, yVel
   const [score, setScore] = useState([0, 0]);
   const [red, setRed] = useState(false);
 
@@ -20,26 +20,20 @@ function PongGame() {
       setPos = setBluePos;
     }
 
-    const handleUp = (event) => {
-      if (event.key === "ArrowUp") {
-        setPos(moveUp);
-        socket.emit("pongUp");
-      }
-    };
-
-    const handleDown = (event) => {
+    const handlePress = (event) => {
       if (event.key === "ArrowDown") {
-        setPos(moveDown);
         socket.emit("pongDown");
+        setPos(moveDown);
+      } else if (event.key === "ArrowUp") {
+        socket.emit("pongUp");
+        setPos(moveUp);
       }
     };
 
-    document.addEventListener("keydown", handleUp);
-    document.addEventListener("keydown", handleDown);
+    document.addEventListener("keydown", handlePress);
 
     return () => {
-      document.removeEventListener("keydown", handleUp);
-      document.removeEventListener("keydown", handleDown);
+      document.removeEventListener("keydown", handlePress);
     };
   }, [red]);
 
@@ -99,7 +93,7 @@ function PongGame() {
           newScore[1] += 1;
           return newScore;
         });
-        return [25, 50, -1, prevBall[3]];
+        return [25, 50, 1, prevBall[3]];
       }
       return prevBall;
     });
@@ -127,10 +121,18 @@ function PongGame() {
       else setRedPos(moveUp);
     });
 
+    socket.on("pongGameState", (gameState) => {
+      setBallPos(gameState.ballPos.slice());
+      setScore(gameState.score.slice());
+      setBluePos(gameState.bluePos);
+      setRedPos(gameState.redPos);
+    });
+
     return () => {
       socket.removeAllListeners("color");
       socket.removeAllListeners("pongDown");
       socket.removeAllListeners("Up");
+      socket.removeAllListeners("pongGameState");
     };
   }, [red]);
 
