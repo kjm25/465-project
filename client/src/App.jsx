@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Pong from "./pages/Pong.jsx";
+import GameSelect from "./pages/GameSelect.jsx";
+import Join from "./pages/Join.jsx";
 import { socket } from "./socket";
 
 function App() {
@@ -21,6 +23,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/pong" element={<Pong />} />
+        <Route path="/gameselect" element={<GameSelect />} />
+        <Route path="/join" element={<Join />}></Route>
       </Routes>
     </>
   );
