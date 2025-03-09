@@ -1,0 +1,26 @@
+@import url(../assets/fonts.css);
+
+:root {
+  --main-font: "Silkscreen", sans-serif;
+  --black: rgb(0, 0, 0);
+  --white: rgb(255, 255, 255);
+  --light-blue: rgb(58, 229, 255);
+  --green: rgb(9, 95, 29);
+}
+
+.game-button {
+  font-family: "VT323", monospace;
+  text-align: center;
+  text-decoration: none;
+  font-size: 2rem;
+  color: var(--black);
+  background-color: transparent;
+  transition: 0.3s;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.game-button:hover {
+  background-color: var(--green);
+  color: var(--white);
+}

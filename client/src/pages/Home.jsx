@@ -10,10 +10,10 @@ function Home() {
       <h1 className="title">Welcome to GamePlace</h1>
       <div className="selection-container">
         <div className="page-link">
-          <Link to="/gameselect">Link To Game Select (Test)</Link>
+          <Link to="/gameselect">Host Game</Link>
         </div>
         <div className="page-link">
-          <Link to="/join">Link to Join Lobby (Test)</Link>
+          <Link to="/join">Join Lobby</Link>
         </div>
       </div>
     </main>

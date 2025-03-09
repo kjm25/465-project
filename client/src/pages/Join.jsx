@@ -1,14 +1,29 @@
 import React from "react";
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function Join() {
   const [joinCode, setJoinCode] = useState("");
-  const handleJoin = () => {};
+  const navigate = useNavigate();
+
+  const handleJoin = () => {
+    if (joinCode.length === 4) {
+      navigate(`/lobby/${joinCode.toUpperCase()}`);
+    } else {
+      alert("Please enter a valid 4-character join code.");
+    }
+  };
+
   return (
     <div className="join-container">
       <h2>Enter Join Code</h2>
-      <input type="text" className="join-input" maxLength={4} />
+      <input
+        type="text"
+        className="join-input"
+        maxLength={4}
+        value={joinCode}
+        onChange={(e) => setJoinCode(e.target.value)}
+      />
 
       <button className="join" onClick={handleJoin}>
         Join

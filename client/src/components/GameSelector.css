@@ -1,0 +1,38 @@
+@import url(../assets/fonts.css);
+
+:root {
+  --main-font: "Silkscreen", sans-serif;
+  --black: rgb(0, 0, 0);
+  --white: rgb(255, 255, 255);
+  --light-blue: rgb(58, 229, 255);
+  --green: rgb(9, 95, 29);
+}
+
+.game-selector {
+  font-family: "VT323", monospace;
+  text-align: center;
+  padding: 20px;
+  font-size: 4rem;
+  font-weight: normal;
+}
+
+.game-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+  gap: 2rem;
+}
+
+.host-button {
+  font-family: "VT323", monospace;
+  text-align: center;
+  text-decoration: none;
+  font-size: 3rem;
+  color: var(--black);
+  background-color: transparent;
+  transition: 0.3s;
+  border-radius: 10px;
+  border: none;
+  display: block;
+  margin: 0 auto;
+}

@@ -6,8 +6,7 @@ import "./GameSelector.css";
 //create list of games to choose from with corresponding ID
 const games = [
   { id: 1, name: "Pong" },
-  { id: 2, name: "Game 2" },
-  { id: 3, name: "Game 3 " },
+  { id: 2, name: "BattleShip" },
 ];
 
 function GameSelector() {
