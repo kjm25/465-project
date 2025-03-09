@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Pong from "./pages/Pong.jsx";
 import GameSelect from "./pages/GameSelect.jsx";
 import Join from "./pages/Join.jsx";
+import Lobby from "./pages/Lobby.jsx";
 import { socket } from "./socket";
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         <Route path="/pong" element={<Pong />} />
         <Route path="/gameselect" element={<GameSelect />} />
         <Route path="/join" element={<Join />}></Route>
+        <Route path="/lobby/:roomID" element={<Lobby />}></Route>
       </Routes>
     </>
   );

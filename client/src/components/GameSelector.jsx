@@ -10,10 +10,18 @@ const games = [
 ];
 
 function GameSelector() {
-  const [selectGame, setSelectGame] = useState(null);
+  const [selectedGame, setSelectedGame] = useState(null);
+  const navigate = useNavigate();
 
-  const handleSelectedGame = (game) => {
-    setSelectGame(game);
+  const generateRoomID = () => {
+    return Math.random().toString(36).substring(2, 6).toUpperCase();
+  };
+
+  const handleHostGame = () => {
+    if (!selectedGame) return;
+
+    const roomID = generateRoomID();
+    navigate(`/lobby/${roomID}`, { state: { gameName: selectedGame } });
   };
 
   return (
@@ -21,10 +29,21 @@ function GameSelector() {
       <h1 className="game-selector">Choose a Game to Host</h1>
       <div className="game-container">
         {games.map((game) => (
-          <GameButton key={game.id} game={game} />
+          <GameButton
+            key={game.id}
+            game={game}
+            isSelected={selectedGame === game.id}
+            onSelect={setSelectedGame}
+          />
         ))}
       </div>
-      <button className="host-button">Host</button>
+      <button
+        className="host-button"
+        onClick={handleHostGame}
+        disabled={!selectedGame}
+      >
+        Host
+      </button>
     </>
   );
 }
