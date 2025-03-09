@@ -12,8 +12,9 @@ function Lobby() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const gameName = location.state?.gameName || "pong"; // Default to "pong" if not provided
-  const gameConfig = gameConfigs[gameName.toLowerCase()] || gameConfigs.pong;
+  const gameName = location.state?.gameName || "pong";
+  const gameConfig =
+    gameConfigs[String(gameName).toLowerCase()] || gameConfigs.pong;
 
   const [players, setPlayers] = useState(["Host"]);
   const handleQuit = () => {};
