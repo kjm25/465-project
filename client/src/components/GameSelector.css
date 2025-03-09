@@ -8,34 +8,31 @@
   --green: rgb(9, 95, 29);
 }
 
-.home-container {
+.game-selector {
   font-family: "VT323", monospace;
   text-align: center;
   padding: 20px;
-}
-.title {
   font-size: 4rem;
   font-weight: normal;
 }
 
-.selection-container {
+.game-container {
   display: flex;
-  gap: 20px;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  margin-bottom: 50px;
+  gap: 2rem;
 }
 
-.page-link a {
-  display: inline-block;
-  color: var(--black);
-  padding: 10px 20px;
-  font-size: 2rem;
+.host-button {
+  font-family: "VT323", monospace;
+  text-align: center;
   text-decoration: none;
-  border-radius: 10px;
+  font-size: 3rem;
+  color: var(--black);
+  background-color: transparent;
   transition: 0.3s;
-}
-
-.page-link a:hover {
-  color: var(--white);
-  background-color: var(--green);
+  border-radius: 10px;
+  border: none;
+  display: block;
+  margin: 0 auto;
 }
