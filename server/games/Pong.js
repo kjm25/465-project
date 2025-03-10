@@ -1,5 +1,5 @@
 //game creation functions - might be moved to another file
-const createPongGame = function (roomName, io, activeRoomList) {
+const createPongGame = function (roomName, io, activeRoomList, room) {
   let firstRun = true;
   let gameSentCount = 0;
   const moveUp = (prevPos) => Math.max(prevPos - 5, 0);
@@ -21,7 +21,7 @@ const createPongGame = function (roomName, io, activeRoomList) {
   };
 
   const interval = setInterval(async () => {
-    const sockets = await io.to(roomName).fetchSockets();
+    const sockets = room.sockets;
     if (sockets.length === 0) {
       //activeRoomList.delete(roomName); TODO add a delete function
       clearInterval(interval); //stop the game if all players have left
