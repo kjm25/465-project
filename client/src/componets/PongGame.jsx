@@ -11,6 +11,14 @@ function PongGame() {
 
   const moveUp = (prevPos) => Math.max(prevPos - 5, 0);
   const moveDown = (prevPos) => Math.min(prevPos + 5, 100);
+  const isCollision = function (paddlePos, ballPos) {
+    const hitboxWidth = 19;
+    const fraction = paddlePos / 100;
+    const lowerBound = paddlePos - hitboxWidth * fraction;
+    const upperBound = lowerBound + hitboxWidth;
+
+    return ballPos >= lowerBound && ballPos <= upperBound;
+  };
 
   useEffect(() => {
     let setPos;
@@ -45,14 +53,16 @@ function PongGame() {
         //update velocity based on hitting a wall or a player
         if (
           prevBallPos[0] + prevBallPos[2] <= 4 &&
-          redPos - prevBallPos[1] >= -5 &&
-          redPos - prevBallPos[1] <= 12
+          isCollision(redPos, prevBallPos[1])
+          // redPos - prevBallPos[1] >= -5 &&
+          // redPos - prevBallPos[1] <= 12
         )
           newState[2] = Math.abs(prevBallPos[2]);
         else if (
           prevBallPos[0] + prevBallPos[2] >= 96 &&
-          bluePos - prevBallPos[1] >= -5 &&
-          bluePos - prevBallPos[1] <= 12
+          isCollision(bluePos, prevBallPos[1])
+          // bluePos - prevBallPos[1] >= -5 &&
+          // bluePos - prevBallPos[1] <= 12
         )
           newState[2] = -Math.abs(prevBallPos[2]);
 
