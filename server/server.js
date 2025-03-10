@@ -18,31 +18,37 @@ class room {
 
 app.use(express.static(path.join(__dirname, "../client/dist")));
 
-// app.get("/*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
-// }); //this works
-
-app.get("/", (req, res) => {
-  res.status(200);
-  res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
-});
-
-app.get("/pong", (req, res) => {
-  res.status(200);
+app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
 });
 
 io.on("connection", (socket) => {
   console.log(`client with socket id ${socket.id} connected`);
 
-  const roomName = "test_room"; // TODO change to room code sent by client once implemented
-  const gameRoom = joinRoom(roomName, socket);
+  let roomName = "";
+  let gameRoom = undefined;
+  let gameType = "";
 
-  if (!activeRoomList.includes(roomName)) {
-    //create game if not already created - will rework once flow is changed with create page
-    activeRoomList.push(roomName);
-    createPongGame(roomName, io, activeRoomList, gameRoom);
-  }
+  socket.on("joinRoom", (roomCode) => {
+    if (roomName != "") leaveRoom(roomName, socket);
+
+    roomName = roomCode;
+    gameRoom = joinRoom(roomName, socket);
+    io.to(roomName).emit("lobbyCount", gameRoom.numPlayers);
+  });
+
+  socket.on("setGame", (game) => (gameType = game));
+  socket.on("startGame", () => {
+    console.log("startgame", gameType);
+    if (roomName != "") {
+      //!activeRoomList.includes(roomName) &&
+      //create game if not already created
+      if ((gameType = "pong")) {
+        io.to(roomName).emit("pongStart");
+        createPongGame(roomName, io, activeRoomList, gameRoom);
+      }
+    }
+  });
 
   socket.on("disconnect", () => {
     leaveRoom(roomName, socket);
@@ -76,14 +82,14 @@ const leaveRoom = function (roomName, socket) {
   const roomIndex = activeRoomList.findIndex((room) => room.name === roomName);
   if (roomIndex >= 0) {
     const currentRoom = activeRoomList[roomIndex];
-    room.numPlayers -= 1;
-    const socketIndex = array.indexOf(socket);
+    currentRoom.numPlayers -= 1;
+    const socketIndex = currentRoom.sockets.indexOf(socket);
     if (socketIndex !== -1) {
       //remove socket from list
-      room.sockets.splice(socketIndex, 1);
+      currentRoom.sockets.splice(socketIndex, 1);
     }
 
-    if ((room.numPlayers = 0)) {
+    if ((currentRoom.numPlayers = 0)) {
       //remove room if empty
       activeRoomList.splice(roomIndex, 1);
     }

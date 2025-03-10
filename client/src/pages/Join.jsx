@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { socket } from "../socket.js";
 
 function Join() {
   const [joinCode, setJoinCode] = useState("");
@@ -8,6 +9,7 @@ function Join() {
 
   const handleJoin = () => {
     if (joinCode.length === 4) {
+      socket.emit("joinRoom", joinCode);
       navigate(`/lobby/${joinCode.toUpperCase()}`);
     } else {
       alert("Please enter a valid 4-character join code.");
