@@ -6,7 +6,8 @@ const io = require("socket.io")(server);
 
 const port = process.env.PORT || 5001;
 
-const activeRoomList = new Set();
+const activeRoomList = [];
+const room = { game: "", numPlayers: 0, sockets: [] };
 
 app.use(express.static(path.join(__dirname, "../client/dist")));
 
@@ -28,11 +29,11 @@ io.on("connection", (socket) => {
   console.log(`client with socket id ${socket.id} connected`);
 
   const roomName = "test_room"; // TODO change to room code sent by client once implemented
-  socket.join(roomName);
+  joinRoom(roomName, socket);
 
-  if (!activeRoomList.has(roomName)) {
+  if (!activeRoomList.includes(roomName)) {
     //create game if not already created - will rework once flow is changed with create page
-    activeRoomList.add(roomName);
+    activeRoomList.push(roomName);
     createPongGame(roomName);
   }
 
@@ -45,6 +46,11 @@ server.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
 
+const joinRoom = function (roomName, socket) {
+  socket.join(roomName);
+};
+
+//game creation functions - might be moved to another file
 const createPongGame = function (roomName) {
   let firstRun = true;
   let gameSentCount = 0;
@@ -61,7 +67,7 @@ const createPongGame = function (roomName) {
   const interval = setInterval(async () => {
     const sockets = await io.to(roomName).fetchSockets();
     if (sockets.length === 0) {
-      activeRoomList.delete(roomName);
+      //activeRoomList.delete(roomName); TODO add a delete function
       clearInterval(interval); //stop the game if all players have left
     } else if (sockets.length === 1) {
       return; //return if only one player
