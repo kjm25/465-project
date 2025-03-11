@@ -13,20 +13,31 @@ function Lobby() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const gameName = location.state?.gameName || "pong";
-  const gameConfig =
-    gameConfigs[String(gameName).toLowerCase()] || gameConfigs.pong;
+  // will need client logic to make this work
+  const gameName = location.state?.gameName || "Pong";
+  // const gameConfig =
+  //   gameConfigs[String(gameName).toLowerCase()] || gameConfigs.pong;
+  const gameConfig = gameConfigs.pong;
 
   const [players, setPlayers] = useState([1]);
-  const handleQuit = () => {};
+
+  const handleQuit = () => {
+    socket.emit("leaveRoom");
+    window.location.replace("/");
+  };
   const handleStart = () => {
-    socket.emit("startGame");
+    if (players < gameConfig.maxPlayers) {
+      //need to give error message to user
+    } else {
+      socket.emit("startGame");
+    }
   };
 
   useEffect(() => {
     socket.on("pongStart", () => {
       navigate(`/pong`);
     });
+
     socket.on("lobbyCount", (count) => setPlayers(count));
 
     return () => {

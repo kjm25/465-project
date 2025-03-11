@@ -37,9 +37,17 @@ io.on("connection", (socket) => {
     io.to(roomName).emit("lobbyCount", gameRoom.numPlayers);
   });
 
+  socket.on("leaveRoom", (roomCode) => {
+    if (roomName != "") {
+      leaveRoom(roomName, socket);
+    }
+
+    roomName = "";
+    gameRoom = undefined;
+  });
+
   socket.on("setGame", (game) => (gameType = game));
   socket.on("startGame", () => {
-    console.log("startgame", gameType);
     if (roomName != "") {
       //!activeRoomList.includes(roomName) &&
       //create game if not already created
@@ -88,6 +96,7 @@ const leaveRoom = function (roomName, socket) {
       //remove socket from list
       currentRoom.sockets.splice(socketIndex, 1);
     }
+    io.to(roomName).emit("lobbyCount", currentRoom.numPlayers);
 
     if ((currentRoom.numPlayers = 0)) {
       //remove room if empty
