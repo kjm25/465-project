@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import GameButton from "./gameButton";
 import "./GameSelector.css";
+import { socket } from "../socket.js";
 
 //create list of games to choose from with corresponding ID
 const games = [
@@ -17,10 +18,12 @@ function GameSelector() {
     return Math.random().toString(36).substring(2, 6).toUpperCase();
   };
 
-  const handleHostGame = () => {
-    if (!selectedGame) return;
-
+  const handleHostGame = (game_id) => {
     const roomID = generateRoomID();
+    if (game_id == 1) {
+      socket.emit("setGame", "pong");
+      socket.emit("joinRoom", roomID);
+    }
     navigate(`/lobby/${roomID}`, { state: { gameName: selectedGame } });
   };
 
@@ -33,17 +36,17 @@ function GameSelector() {
             key={game.id}
             game={game}
             isSelected={selectedGame === game.id}
-            onSelect={setSelectedGame}
+            onSelect={handleHostGame}
           />
         ))}
       </div>
-      <button
+      {/* <button
         className="host-button"
-        onClick={handleHostGame}
+        //onClick={handleHostGame}
         disabled={!selectedGame}
       >
         Host
-      </button>
+      </button> */}
     </>
   );
 }

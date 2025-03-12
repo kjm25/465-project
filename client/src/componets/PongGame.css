@@ -3,13 +3,20 @@
   box-sizing: border-box;
   background-color: white;
   color: black;
-  height: 50vw;
-  width: 70vw;
+  margin-left: auto;
+  margin-right: auto;
+  height: 46vw; /* using vw for height over vh to not have dynamic aspect ratio */
+  width: 65vw;
 }
 
 .player {
   height: 15%;
   width: 3%;
+}
+
+.scoreboard {
+  margin-top: 0;
+  padding-top: 0;
 }
 
 .red-player {
@@ -31,4 +38,9 @@
   width: 3%;
   top: 50%;
   left: 50%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
 }
