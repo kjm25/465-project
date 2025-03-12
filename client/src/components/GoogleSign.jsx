@@ -1,4 +1,5 @@
 import React from "react";
+import { socket } from "../socket.js";
 
 import { GoogleLogin } from "@react-oauth/google";
 
@@ -8,6 +9,7 @@ function GoogleSign() {
       <GoogleLogin
         onSuccess={(credentialResponse) => {
           console.log(credentialResponse);
+          socket.emit("google_sign", credentialResponse);
         }}
         onError={() => {
           console.log("Login Failed");

@@ -4,6 +4,7 @@ const path = require("path");
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
 const createPongGame = require("./games/Pong");
+const verify = require("./auth.js");
 
 const port = process.env.PORT || 5001;
 
@@ -15,6 +16,17 @@ class room {
     this.name = name;
   }
 }
+
+const signIn = function (socket) {
+  const cookies = socket.handshake.headers.cookie; //try to log user in with cookies
+  try {
+    let token = JSON.parse(read_cookie("id_token", cookies));
+    return verify(token);
+  } catch {
+    console.log("Failed to read cookie");
+    return "";
+  }
+};
 
 app.use(express.static(path.join(__dirname, "../client/dist")));
 
@@ -28,6 +40,7 @@ io.on("connection", (socket) => {
   let roomName = "";
   let gameRoom = undefined;
   let gameType = "";
+  let email = signIn(socket);
 
   socket.on("joinRoom", (roomCode) => {
     if (roomName != "") leaveRoom(roomName, socket);
@@ -56,6 +69,11 @@ io.on("connection", (socket) => {
         createPongGame(roomName, io, activeRoomList, gameRoom);
       }
     }
+  });
+
+  socket.on("google_sign", (credential) => {
+    email = verify(credential);
+    //add cookie response
   });
 
   socket.on("disconnect", () => {
