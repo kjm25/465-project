@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import GameButton from "./gameButton";
+import GameButton from "./GameButton.jsx";
 import "./GameSelector.css";
 import { socket } from "../socket.js";
 
