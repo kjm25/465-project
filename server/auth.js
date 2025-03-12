@@ -12,7 +12,11 @@ async function verify(token, socket) {
     const verified_payload = ticket.getPayload();
     const email = verified_payload["email"];
     console.log(email, "just logged in");
-    socket.emit("id_token", [token, verified_payload["exp"]]);
+    socket.emit("id_token", [
+      token,
+      verified_payload["exp"],
+      verified_payload["email"],
+    ]);
     return email;
   } catch (err) {
     console.error(err); //code to be executed if an error occurs

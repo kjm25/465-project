@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import GoogleSign from "../components/GoogleSign.jsx";
+import Navbar from "../components/Navbar.jsx";
 import "./Home.css";
 
 function Home() {
@@ -8,7 +8,7 @@ function Home() {
 
   return (
     <>
-      <GoogleSign></GoogleSign>
+      <Navbar></Navbar>
       <main className="home-container">
         <h1 className="title">Welcome to GamePlace</h1>
         <div className="selection-container">

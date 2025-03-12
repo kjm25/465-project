@@ -31,7 +31,6 @@ function App() {
           <Route path="/lobby/:roomID" element={<Lobby />}></Route>
         </Routes>
       </GoogleOAuthProvider>
-      ;
     </>
   );
 }
