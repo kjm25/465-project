@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { socket } from "../socket.js";
 import "./Navbar.css";
 import GoogleSign from "./GoogleSign.jsx";
+import { googleLogout } from "@react-oauth/google";
 
 function Navbar() {
   const [email, setEmail] = useState("");
@@ -25,6 +26,13 @@ function Navbar() {
     };
   }, []);
 
+  const signout = function () {
+    document.cookie =
+      "id_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    googleLogout();
+    window.location.reload();
+  };
+
   if (email === "")
     return (
       <nav className="navbar">
@@ -33,9 +41,14 @@ function Navbar() {
     );
   else
     return (
-      <nav className="navbar">
-        <span className="username">{email}</span>
-      </nav>
+      <>
+        <nav className="navbar">
+          <span className="username">{email}</span>
+          <button className="btn btn-danger" onClick={signout}>
+            Sign Out
+          </button>
+        </nav>
+      </>
     );
 }
 

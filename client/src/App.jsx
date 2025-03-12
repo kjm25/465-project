@@ -7,6 +7,7 @@ import Join from "./pages/Join.jsx";
 import Lobby from "./pages/Lobby.jsx";
 import { socket } from "./socket";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const [count, setCount] = useState(0);
