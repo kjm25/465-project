@@ -5,6 +5,7 @@ const server = require("http").Server(app);
 const io = require("socket.io")(server);
 const createPongGame = require("./games/Pong");
 const verify = require("./auth.js");
+const cookieLib = require("cookie");
 
 const port = process.env.PORT || 5001;
 
@@ -20,8 +21,8 @@ class room {
 const signIn = function (socket) {
   const cookies = socket.handshake.headers.cookie; //try to log user in with cookies
   try {
-    let token = JSON.parse(read_cookie("id_token", cookies));
-    return verify(token);
+    const token = JSON.parse(cookieLib.parse(cookies)["id_token"]);
+    return verify(token, socket);
   } catch {
     console.log("Failed to read cookie");
     return "";
@@ -72,7 +73,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("google_sign", (credential) => {
-    email = verify(credential);
+    email = verify(credential, socket);
     //add cookie response
   });
 
