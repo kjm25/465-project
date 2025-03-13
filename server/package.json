@@ -1,6 +1,8 @@
 {
   "dependencies": {
+    "cookie": "^1.0.2",
     "express": "^4.21.2",
+    "google-auth-library": "^9.15.1",
     "socket.io": "^4.8.1"
   },
   "scripts": {
