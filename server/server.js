@@ -6,6 +6,8 @@ const io = require("socket.io")(server);
 const createPongGame = require("./games/Pong");
 const verify = require("./auth.js");
 const cookieLib = require("cookie");
+const { dbGetData, dbSendResult } = require("./database.js");
+require("dotenv").config();
 
 const port = process.env.PORT || 5001;
 
