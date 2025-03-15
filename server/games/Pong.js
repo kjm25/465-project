@@ -23,7 +23,8 @@ const createPongGame = function (roomName, io, activeRoomList, room) {
   const interval = setInterval(async () => {
     const sockets = room.sockets;
     if (gameState.score[0] >= 7 || gameState.score[1] >= 7) {
-      //end game
+      //if(gameState.score[0] >= 7) TODO track usernames when adding data
+      clearInterval(interval);
     } else if (sockets.length === 0) {
       clearInterval(interval); //stop the game if all players have left
     } else if (sockets.length === 1) {

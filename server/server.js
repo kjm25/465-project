@@ -56,6 +56,11 @@ io.on("connection", (socket) => {
     socket.emit("email", await email);
   });
 
+  socket.on("getProfile", async () => {
+    const profileData = await dbGetData(await email);
+    socket.emit("profileData", profileData);
+  });
+
   socket.on("leaveRoom", (roomCode) => {
     if (roomName != "") {
       leaveRoom(roomName, socket);

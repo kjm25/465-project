@@ -11,7 +11,7 @@ const client = new MongoClient(uri, {
   },
 });
 
-const dbSendResult = async function (winner, loser, score) {
+const dbSendResult = async function (winner, loser, score, game) {
   try {
     await client.connect();
     await client.db("admin").command({ ping: 1 });
@@ -21,6 +21,7 @@ const dbSendResult = async function (winner, loser, score) {
       winner: winner,
       loser: loser,
       score: score,
+      game: game,
       timestamp: new Date(),
     };
     const result = await historyCollection.insertOne(doc);

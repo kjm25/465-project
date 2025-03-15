@@ -3,6 +3,7 @@ import { socket } from "../socket.js";
 import "./Navbar.css";
 import GoogleSign from "./GoogleSign.jsx";
 import { googleLogout } from "@react-oauth/google";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   const [email, setEmail] = useState("");
@@ -48,7 +49,10 @@ function Navbar() {
     return (
       <>
         <nav className="navbar">
-          <span className="username">{email}</span>
+          <Link
+            className="btn btn-info"
+            to="/profile"
+          >{`Profile: ${email}`}</Link>
           <button className="btn btn-danger" onClick={signout}>
             Sign Out
           </button>
