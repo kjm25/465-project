@@ -8,6 +8,7 @@ function PongGame() {
   const [ballPos, setBallPos] = useState([50, 50, 0, 0]); // xPos, yPos, xVel, yVel
   const [score, setScore] = useState([0, 0]);
   const [red, setRed] = useState(false);
+  const [winner, setWinner] = useState("");
 
   const moveUp = (prevPos) => Math.max(prevPos - 5, 0);
   const moveDown = (prevPos) => Math.min(prevPos + 5, 100);
@@ -47,6 +48,7 @@ function PongGame() {
 
   useEffect(() => {
     const ballUpdate = () => {
+      if (winner !== "") return; //return if game over
       setBallPos((prevBallPos) => {
         let newState = prevBallPos.slice();
 
@@ -83,24 +85,22 @@ function PongGame() {
     return () => {
       clearInterval(ballInterval);
     };
-  }, [bluePos, redPos]);
+  }, [bluePos, redPos, winner]);
 
   useEffect(() => {
     //SetBallPosition to its new place based on velocity. First check if someone has won.
     setBallPos((prevBall) => {
       if (prevBall[0] < 0) {
-        // red wins
         setScore((prevScore) => {
           const newScore = [...prevScore];
-          newScore[0] += 1; //bug this gets run twice - in strict mode
+          newScore[1] += 1;
           return newScore;
         });
         return [25, 50, 1, prevBall[3]];
       } else if (prevBall[0] > 100) {
-        // blue wins
         setScore((prevScore) => {
           const newScore = [...prevScore];
-          newScore[1] += 1;
+          newScore[0] += 1;
           return newScore;
         });
         return [25, 50, 1, prevBall[3]];
@@ -136,6 +136,14 @@ function PongGame() {
       setScore(gameState.score.slice());
       setBluePos(gameState.bluePos);
       setRedPos(gameState.redPos);
+      if (gameState.score[0] >= 7) {
+        setWinner("red");
+        socket.emit("leaveRoom");
+      } //red wins
+      else if (gameState.score[1] >= 7) {
+        setWinner("blue");
+        socket.emit("leaveRoom");
+      } //blue wins
     });
 
     return () => {
@@ -146,20 +154,36 @@ function PongGame() {
     };
   }, [red]);
 
-  return (
-    <>
-      <div className="scoreboard">
-        <h2>
-          Score: {score[0]} - {score[1]}
-        </h2>
-      </div>
-      <div className="outerbox">
-        <PongPlayer side="blue-player" height={bluePos}></PongPlayer>
-        <PongPlayer side="red-player" height={redPos}></PongPlayer>
-        <PongBall Xpos={ballPos[0]} Ypos={ballPos[1]}></PongBall>
-      </div>
-    </>
-  );
+  if (winner !== "") {
+    return (
+      <>
+        <div className="scoreboard">
+          <h2>
+            Score: {score[0]} - {score[1]}
+          </h2>
+          <h2>{`${winner} wins!`}</h2>
+          <button onClick={() => window.location.replace("/")}>
+            Return to Menu
+          </button>
+        </div>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <div className="scoreboard">
+          <h2>
+            Score: {score[0]} - {score[1]}
+          </h2>
+        </div>
+        <div className="outerbox">
+          <PongPlayer side="blue-player" height={bluePos}></PongPlayer>
+          <PongPlayer side="red-player" height={redPos}></PongPlayer>
+          <PongBall Xpos={ballPos[0]} Ypos={ballPos[1]}></PongBall>
+        </div>
+      </>
+    );
+  }
 }
 
 function PongPlayer({ side, height }) {

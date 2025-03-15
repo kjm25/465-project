@@ -26,7 +26,6 @@ const signIn = function (socket) {
     const token = JSON.parse(cookieLib.parse(cookies)["id_token"]);
     return verify(token, socket);
   } catch {
-    console.log("Failed to read cookie");
     return "";
   }
 };
@@ -51,6 +50,10 @@ io.on("connection", (socket) => {
     roomName = roomCode;
     gameRoom = joinRoom(roomName, socket);
     io.to(roomName).emit("lobbyCount", gameRoom.numPlayers);
+  });
+
+  socket.on("getEmail", async () => {
+    socket.emit("email", await email);
   });
 
   socket.on("leaveRoom", (roomCode) => {

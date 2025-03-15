@@ -9,7 +9,6 @@ function Navbar() {
 
   useEffect(() => {
     socket.on("id_token", (array) => {
-      console.log(array);
       document.cookie =
         "id_token=" +
         JSON.stringify(array[0]) +
@@ -20,9 +19,15 @@ function Navbar() {
         "; path=/";
       setEmail(array[2]);
     });
+    socket.on("email", (newEmail) => {
+      setEmail(newEmail);
+    });
+
+    socket.emit("getEmail");
 
     return () => {
       socket.removeAllListeners("id_token");
+      socket.removeAllListeners("email");
     };
   }, []);
 

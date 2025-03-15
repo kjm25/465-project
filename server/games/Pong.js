@@ -22,12 +22,14 @@ const createPongGame = function (roomName, io, activeRoomList, room) {
 
   const interval = setInterval(async () => {
     const sockets = room.sockets;
-    if (sockets.length === 0) {
-      //activeRoomList.delete(roomName); TODO add a delete function
+    if (gameState.score[0] >= 7 || gameState.score[1] >= 7) {
+      //end game
+    } else if (sockets.length === 0) {
       clearInterval(interval); //stop the game if all players have left
     } else if (sockets.length === 1) {
       return; //return if only one player
     } else {
+      //run game logic
       if (firstRun) {
         //first loop logic setupt
         firstRun = false;
@@ -57,11 +59,11 @@ const createPongGame = function (roomName, io, activeRoomList, room) {
 
       const prevGameState = structuredClone(gameState); //calculate one tick of game updates
       if (gameState.ballPos[0] < 0) {
-        gameState.score[0] += 1;
+        gameState.score[1] += 1;
         gameState.ballPos = [25, 50, 1, prevGameState.ballPos[3]];
         io.to(roomName).emit("pongGameState", gameState);
       } else if (gameState.ballPos[0] > 100) {
-        gameState.score[1] += 1;
+        gameState.score[0] += 1;
         gameState.ballPos = [25, 50, 1, prevGameState.ballPos[3]];
         io.to(roomName).emit("pongGameState", gameState);
       } else {
