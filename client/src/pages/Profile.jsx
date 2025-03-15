@@ -43,7 +43,15 @@ function Profile() {
               <td>{game.loser}</td>
               <td>{game.score}</td>
               <td>{game.game}</td>
-              <td>{game.timestamp}</td>
+              <td>
+                {new Date(game.timestamp).toLocaleString("en-US", {
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </td>
             </tr>
           ))}
         </tbody>

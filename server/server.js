@@ -42,7 +42,7 @@ io.on("connection", (socket) => {
   let roomName = "";
   let gameRoom = undefined;
   let gameType = "";
-  let email = signIn(socket);
+  socket.userEmail = signIn(socket);
 
   socket.on("joinRoom", (roomCode) => {
     if (roomName != "") leaveRoom(roomName, socket);
@@ -53,11 +53,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("getEmail", async () => {
-    socket.emit("email", await email);
+    socket.emit("email", await socket.userEmail);
   });
 
   socket.on("getProfile", async () => {
-    const profileData = await dbGetData(await email);
+    const profileData = await dbGetData(await socket.userEmail);
     socket.emit("profileData", profileData);
   });
 
@@ -83,7 +83,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("google_sign", (credential) => {
-    email = verify(credential, socket);
+    socket.userEmail = verify(credential, socket);
     //add cookie response
   });
 

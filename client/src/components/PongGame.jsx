@@ -138,11 +138,11 @@ function PongGame() {
       setRedPos(gameState.redPos);
       if (gameState.score[0] >= 7) {
         setWinner("red");
-        socket.emit("leaveRoom");
+        setTimeout(socket.emit("leaveRoom"), 200); //wait to leave room for bug on server end
       } //red wins
       else if (gameState.score[1] >= 7) {
         setWinner("blue");
-        socket.emit("leaveRoom");
+        setTimeout(socket.emit("leaveRoom"), 200);
       } //blue wins
     });
 
