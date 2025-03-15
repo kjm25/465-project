@@ -1,7 +1,10 @@
+const { dbSendResult } = require("../database");
+
 //game creation functions - might be moved to another file
 const createPongGame = function (roomName, io, activeRoomList, room) {
   let firstRun = true;
   let gameSentCount = 0;
+  let emails = [];
   const moveUp = (prevPos) => Math.max(prevPos - 5, 0);
   const moveDown = (prevPos) => Math.min(prevPos + 5, 100);
   const gameState = {
@@ -22,12 +25,40 @@ const createPongGame = function (roomName, io, activeRoomList, room) {
 
   const interval = setInterval(async () => {
     const sockets = room.sockets;
-    if (sockets.length === 0) {
-      //activeRoomList.delete(roomName); TODO add a delete function
+
+    if (gameState.score[0] >= 7 || gameState.score[1] >= 7) {
+      //game over - send result to database
+      if (gameState.score[0] >= 7 && (emails[0] !== "" || emails[1] !== "")) {
+        if (emails[0] === "") emails[0] = "Anonymous Player";
+        if (emails[1] === "") emails[1] = "Anonymous Player";
+        //red (socket0) wins
+        dbSendResult(
+          emails[0],
+          emails[1],
+          `${gameState.score[0]}-${gameState.score[1]}`,
+          "Pong"
+        );
+      } else if (
+        gameState.score[1] >= 7 &&
+        (emails[0] !== "" || emails[1] !== "")
+      ) {
+        if (emails[0] === "") emails[0] = "Anonymous Player";
+        if (emails[1] === "") emails[1] = "Anonymous Player";
+        dbSendResult(
+          emails[1],
+          emails[0],
+          `${gameState.score[0]}-${gameState.score[1]}`,
+          "Pong"
+        );
+        //blue (socket1) wins
+      }
+      clearInterval(interval);
+    } else if (sockets.length === 0) {
       clearInterval(interval); //stop the game if all players have left
     } else if (sockets.length === 1) {
       return; //return if only one player
     } else {
+      //run game logic
       if (firstRun) {
         //first loop logic setupt
         firstRun = false;
@@ -52,16 +83,17 @@ const createPongGame = function (roomName, io, activeRoomList, room) {
           gameState.bluePos = moveDown(gameState.bluePos);
         });
 
+        emails = [await sockets[0].userEmail, await sockets[1].userEmail];
         io.to(roomName).emit("pongGameState", gameState);
       }
 
       const prevGameState = structuredClone(gameState); //calculate one tick of game updates
       if (gameState.ballPos[0] < 0) {
-        gameState.score[0] += 1;
+        gameState.score[1] += 1;
         gameState.ballPos = [25, 50, 1, prevGameState.ballPos[3]];
         io.to(roomName).emit("pongGameState", gameState);
       } else if (gameState.ballPos[0] > 100) {
-        gameState.score[1] += 1;
+        gameState.score[0] += 1;
         gameState.ballPos = [25, 50, 1, prevGameState.ballPos[3]];
         io.to(roomName).emit("pongGameState", gameState);
       } else {

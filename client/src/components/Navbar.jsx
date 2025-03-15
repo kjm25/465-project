@@ -3,13 +3,13 @@ import { socket } from "../socket.js";
 import "./Navbar.css";
 import GoogleSign from "./GoogleSign.jsx";
 import { googleLogout } from "@react-oauth/google";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   const [email, setEmail] = useState("");
 
   useEffect(() => {
     socket.on("id_token", (array) => {
-      console.log(array);
       document.cookie =
         "id_token=" +
         JSON.stringify(array[0]) +
@@ -20,9 +20,15 @@ function Navbar() {
         "; path=/";
       setEmail(array[2]);
     });
+    socket.on("email", (newEmail) => {
+      setEmail(newEmail);
+    });
+
+    socket.emit("getEmail");
 
     return () => {
       socket.removeAllListeners("id_token");
+      socket.removeAllListeners("email");
     };
   }, []);
 
@@ -43,7 +49,10 @@ function Navbar() {
     return (
       <>
         <nav className="navbar">
-          <span className="username">{email}</span>
+          <Link
+            className="btn btn-info"
+            to="/profile"
+          >{`Profile: ${email}`}</Link>
           <button className="btn btn-danger" onClick={signout}>
             Sign Out
           </button>
