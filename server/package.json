@@ -10,6 +10,7 @@
   "scripts": {
     "build-client": "cd ../client && npm i && npm run build",
     "pre-build": "npm i && npm run build-client",
+    "build-dev": "npm run pre-build && npm run dev",
     "start": "node server.js",
     "dev": "npx nodemon server.js"
   },

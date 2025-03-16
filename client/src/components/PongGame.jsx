@@ -137,11 +137,11 @@ function PongGame() {
       setBluePos(gameState.bluePos);
       setRedPos(gameState.redPos);
       if (gameState.score[0] >= 7) {
-        setWinner("red");
+        setWinner("Red");
         setTimeout(socket.emit("leaveRoom"), 200); //wait to leave room for bug on server end
       } //red wins
       else if (gameState.score[1] >= 7) {
-        setWinner("blue");
+        setWinner("Blue");
         setTimeout(socket.emit("leaveRoom"), 200);
       } //blue wins
     });
@@ -157,29 +157,36 @@ function PongGame() {
   if (winner !== "") {
     return (
       <>
-        <div className="scoreboard">
-          <h2>
-            Score: {score[0]} - {score[1]}
-          </h2>
-          <h2>{`${winner} wins!`}</h2>
-          <button onClick={() => window.location.replace("/")}>
-            Return to Menu
-          </button>
+        <div className="pong">
+          <div className="scoreboard mx-auto">
+            <h2>
+              Score: {score[0]} - {score[1]}
+            </h2>
+            <h2>{`${winner} Wins!`}</h2>
+            <button
+              className="btn btn-lg btn-success m-2"
+              onClick={() => window.location.replace("/")}
+            >
+              Return to Menu
+            </button>
+          </div>
         </div>
       </>
     );
   } else {
     return (
       <>
-        <div className="scoreboard">
-          <h2>
-            Score: {score[0]} - {score[1]}
-          </h2>
-        </div>
-        <div className="outerbox">
-          <PongPlayer side="blue-player" height={bluePos}></PongPlayer>
-          <PongPlayer side="red-player" height={redPos}></PongPlayer>
-          <PongBall Xpos={ballPos[0]} Ypos={ballPos[1]}></PongBall>
+        <div className="pong">
+          <div className="scoreboard mx-auto">
+            <h2>
+              Score: {score[0]} - {score[1]}
+            </h2>
+          </div>
+          <div className="outerbox">
+            <PongPlayer side="blue-player" height={bluePos}></PongPlayer>
+            <PongPlayer side="red-player" height={redPos}></PongPlayer>
+            <PongBall Xpos={ballPos[0]} Ypos={ballPos[1]}></PongBall>
+          </div>
         </div>
       </>
     );
