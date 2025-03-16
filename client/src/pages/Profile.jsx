@@ -26,40 +26,42 @@ function Profile() {
 
   return (
     <>
-      <h1 className="game-font h1">{`Match history for ${email}`}</h1>
-      <table className="table table-bordered table-hover">
-        <thead>
-          <tr>
-            <th>Winner</th>
-            <th>Loser</th>
-            <th>Score</th>
-            <th>Game</th>
-            <th>Time Played</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((game) => (
+      <div className="d-flex flex-column align-self-center">
+        <h1 className="game-font h1">{`Match history for ${email}`}</h1>
+        <table className="table table-bordered table-hover mx-3 w-auto">
+          <thead>
             <tr>
-              <td>{game.winner}</td>
-              <td>{game.loser}</td>
-              <td>{game.score}</td>
-              <td>{game.game}</td>
-              <td>
-                {new Date(game.timestamp).toLocaleString("en-US", {
-                  year: "numeric",
-                  month: "numeric",
-                  day: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </td>
+              <th>Winner</th>
+              <th>Loser</th>
+              <th>Score</th>
+              <th>Game</th>
+              <th>Time Played</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <Link className="btn btn-info" to="/">
-        Return to Main Menu
-      </Link>
+          </thead>
+          <tbody>
+            {data.map((game) => (
+              <tr>
+                <td>{game.winner}</td>
+                <td>{game.loser}</td>
+                <td>{game.score}</td>
+                <td>{game.game}</td>
+                <td>
+                  {new Date(game.timestamp).toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "numeric",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <Link className="btn w-auto mx-auto btn-info" to="/">
+          Return to Main Menu
+        </Link>
+      </div>
     </>
   );
 }

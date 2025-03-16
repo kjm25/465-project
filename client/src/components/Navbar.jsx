@@ -42,7 +42,7 @@ function Navbar() {
   if (email === "")
     return (
       <nav className="navbar">
-        <GoogleSign className="google"></GoogleSign>
+        <GoogleSign className="google mx-2"></GoogleSign>
       </nav>
     );
   else
@@ -50,10 +50,10 @@ function Navbar() {
       <>
         <nav className="navbar">
           <Link
-            className="btn btn-info pl-3"
+            className="btn btn-info mx-2"
             to="/profile"
           >{`Profile: ${email}`}</Link>
-          <button className="btn btn-danger px-3" onClick={signout}>
+          <button className="btn btn-danger mx-2" onClick={signout}>
             Sign Out
           </button>
         </nav>
