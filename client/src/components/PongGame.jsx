@@ -159,9 +159,9 @@ function PongGame() {
       <>
         <div className="pong">
           <div className="scoreboard mx-auto">
-            <h2>
+            <h1 className="h2">
               Score: {score[0]} - {score[1]}
-            </h2>
+            </h1>
             <h2>{`${winner} Wins!`}</h2>
             <button
               className="btn btn-lg btn-success m-2"
@@ -178,9 +178,9 @@ function PongGame() {
       <>
         <div className="pong">
           <div className="scoreboard mx-auto">
-            <h2>
+            <h1 className="h2">
               Score: {score[0]} - {score[1]}
-            </h2>
+            </h1>
           </div>
           <div className="outerbox">
             <PongPlayer side="blue-player" height={bluePos}></PongPlayer>

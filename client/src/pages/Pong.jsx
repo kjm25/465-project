@@ -9,7 +9,9 @@ function Pong() {
 
   return (
     <>
-      <PongGame></PongGame>
+      <main>
+        <PongGame></PongGame>
+      </main>
     </>
   );
 }

@@ -29,8 +29,10 @@ function GameSelector() {
 
   return (
     <>
-      <h1 className="game-selector">Choose a Game to Host</h1>
-      <div className="game-container">
+      <header>
+        <h1 className="game-selector">Choose a Game to Host</h1>
+      </header>
+      <main className="game-container">
         {games.map((game) => (
           <GameButton
             key={game.id}
@@ -39,7 +41,7 @@ function GameSelector() {
             onSelect={handleHostGame}
           />
         ))}
-      </div>
+      </main>
       {/* <button
         className="host-button"
         //onClick={handleHostGame}

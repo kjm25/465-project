@@ -19,7 +19,7 @@ function Lobby() {
   // const gameConfig =
   //   gameConfigs[String(gameName).toLowerCase()] || gameConfigs.pong;
   const gameConfig = gameConfigs.pong;
-  const [disabledClass, setDisabledClass] = useState("disabled");
+  const [disabledClass, setDisabledClass] = useState("disabled btn-dark");
 
   const [players, setPlayers] = useState([1]);
 
@@ -50,28 +50,33 @@ function Lobby() {
   }, []);
 
   useEffect(() => {
-    if (players >= gameConfig.maxPlayers) setDisabledClass("");
-    else if (players < gameConfig.maxPlayers) setDisabledClass("disabled");
+    if (players >= gameConfig.maxPlayers) setDisabledClass("btn-success");
+    else if (players < gameConfig.maxPlayers)
+      setDisabledClass("disabled btn-dark");
   }, [players]);
 
   return (
     <div className="lobby-container game-font">
-      <h1 className="display-1">{gameConfig.name} Lobby</h1>
-      <p>Room Code: {roomID}</p>
-      <p>
-        Players: {players} / {gameConfig.maxPlayers}
-      </p>
+      <header>
+        <h1 className="display-1">{gameConfig.name} Lobby</h1>
+      </header>
+      <main>
+        <p>Room Code: {roomID}</p>
+        <p>
+          Players: {players} / {gameConfig.maxPlayers}
+        </p>
 
-      <button className="btn btn-lg btn-danger m-2" onClick={handleQuit}>
-        Quit
-      </button>
+        <button className="btn btn-lg btn-danger m-2" onClick={handleQuit}>
+          Quit
+        </button>
 
-      <button
-        className={`btn btn-lg btn-success m-2 ${disabledClass}`}
-        onClick={handleStart}
-      >
-        Start
-      </button>
+        <button
+          className={`btn btn-lg m-2 ${disabledClass}`}
+          onClick={handleStart}
+        >
+          Start
+        </button>
+      </main>
     </div>
   );
 }
