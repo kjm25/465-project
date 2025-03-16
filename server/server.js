@@ -117,16 +117,17 @@ const joinRoom = function (roomName, socket, newGame) {
     return newGame;
   } else {
     const currentGame = activeRoomList[roomIndex];
-    console.log(currentGame.numPlayers, "before join");
+    if (currentGame.sockets.length > 0 && currentGame.numPlayers == 0) {
+      //bugfix for losing player count somehow
+      currentGame.numPlayers = 1;
+    }
     currentGame.numPlayers += 1;
     currentGame.sockets.push(socket);
-    console.log(currentGame.numPlayers, "after join");
     return currentGame;
   }
 };
 
 const leaveRoom = function (roomName, socket) {
-  console.log(roomName, "leaving room");
   const roomIndex = activeRoomList.findIndex((room) => room.name === roomName);
   if (roomIndex >= 0) {
     const currentRoom = activeRoomList[roomIndex];
@@ -137,7 +138,6 @@ const leaveRoom = function (roomName, socket) {
       currentRoom.sockets.splice(socketIndex, 1);
     }
     io.to(roomName).emit("lobbyCount", currentRoom.numPlayers);
-    console.log(currentRoom.numPlayers, "leave");
 
     if ((currentRoom.numPlayers = 0)) {
       //remove room if empty
