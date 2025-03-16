@@ -26,7 +26,7 @@ function Profile() {
 
   return (
     <>
-      <div className="d-flex flex-column align-self-center">
+      <main className="d-flex flex-column align-self-center">
         <h1 className="game-font h1">{`Match history for ${email}`}</h1>
         <table className="table table-bordered table-hover mx-3 w-auto">
           <thead>
@@ -61,7 +61,7 @@ function Profile() {
         <Link className="btn w-auto mx-auto btn-info" to="/">
           Return to Main Menu
         </Link>
-      </div>
+      </main>
     </>
   );
 }

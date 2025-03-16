@@ -57,22 +57,26 @@ function Lobby() {
 
   return (
     <div className="lobby-container game-font">
-      <h1 className="display-1">{gameConfig.name} Lobby</h1>
-      <p>Room Code: {roomID}</p>
-      <p>
-        Players: {players} / {gameConfig.maxPlayers}
-      </p>
+      <header>
+        <h1 className="display-1">{gameConfig.name} Lobby</h1>
+      </header>
+      <main>
+        <p>Room Code: {roomID}</p>
+        <p>
+          Players: {players} / {gameConfig.maxPlayers}
+        </p>
 
-      <button className="btn btn-lg btn-danger m-2" onClick={handleQuit}>
-        Quit
-      </button>
+        <button className="btn btn-lg btn-danger m-2" onClick={handleQuit}>
+          Quit
+        </button>
 
-      <button
-        className={`btn btn-lg m-2 ${disabledClass}`}
-        onClick={handleStart}
-      >
-        Start
-      </button>
+        <button
+          className={`btn btn-lg m-2 ${disabledClass}`}
+          onClick={handleStart}
+        >
+          Start
+        </button>
+      </main>
     </div>
   );
 }
