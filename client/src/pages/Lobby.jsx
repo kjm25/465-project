@@ -19,7 +19,7 @@ function Lobby() {
   // const gameConfig =
   //   gameConfigs[String(gameName).toLowerCase()] || gameConfigs.pong;
   const gameConfig = gameConfigs.pong;
-  const [disabledClass, setDisabledClass] = useState("disabled");
+  const [disabledClass, setDisabledClass] = useState("disabled btn-dark");
 
   const [players, setPlayers] = useState([1]);
 
@@ -50,8 +50,9 @@ function Lobby() {
   }, []);
 
   useEffect(() => {
-    if (players >= gameConfig.maxPlayers) setDisabledClass("");
-    else if (players < gameConfig.maxPlayers) setDisabledClass("disabled");
+    if (players >= gameConfig.maxPlayers) setDisabledClass("btn-success");
+    else if (players < gameConfig.maxPlayers)
+      setDisabledClass("disabled btn-dark");
   }, [players]);
 
   return (
@@ -67,7 +68,7 @@ function Lobby() {
       </button>
 
       <button
-        className={`btn btn-lg btn-success m-2 ${disabledClass}`}
+        className={`btn btn-lg m-2 ${disabledClass}`}
         onClick={handleStart}
       >
         Start
