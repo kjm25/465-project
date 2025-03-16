@@ -1,0 +1,9 @@
+.game-font {
+  font-family: "VT323", monospace;
+  text-align: center;
+}
+.join-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

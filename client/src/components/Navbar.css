@@ -9,10 +9,13 @@
 }
 
 .navbar {
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border: 1px dashed black;
   padding: 0;
+  margin: 0;
   height: 60px;
+  width: 100%;
 }

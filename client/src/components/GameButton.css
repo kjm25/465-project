@@ -1,15 +1,7 @@
 @import url(../assets/fonts.css);
 
-:root {
-  --main-font: "Silkscreen", sans-serif;
-  --black: rgb(0, 0, 0);
-  --white: rgb(255, 255, 255);
-  --light-blue: rgb(58, 229, 255);
-  --green: rgb(9, 95, 29);
-}
-
 .game-button {
-  font-family: "VT323", monospace;
+  font-family: "VT323", monospace !important;
   text-align: center;
   text-decoration: none;
   font-size: 2rem;

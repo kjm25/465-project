@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { socket } from "../socket";
+import "./Lobby.css";
 
 function Profile() {
   const [email, setEmail] = useState("");
@@ -25,7 +26,7 @@ function Profile() {
 
   return (
     <>
-      <h2>{`Match history for ${email}`}</h2>
+      <h1 className="game-font h1">{`Match history for ${email}`}</h1>
       <table className="table table-bordered table-hover">
         <thead>
           <tr>

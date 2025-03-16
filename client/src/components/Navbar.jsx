@@ -50,10 +50,10 @@ function Navbar() {
       <>
         <nav className="navbar">
           <Link
-            className="btn btn-info"
+            className="btn btn-info pl-3"
             to="/profile"
           >{`Profile: ${email}`}</Link>
-          <button className="btn btn-danger" onClick={signout}>
+          <button className="btn btn-danger px-3" onClick={signout}>
             Sign Out
           </button>
         </nav>

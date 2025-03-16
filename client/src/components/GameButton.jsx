@@ -1,14 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./GameButton.css";
 
 function GameButton({ game, isSelected, onSelect }) {
+  const [disabled, setDisabled] = useState(false);
+  //TODO remove disable on battleship if implemented
+  useEffect(() => {
+    if (game.name === "BattleShip") setDisabled(true);
+    else setDisabled(false);
+  }, [game]);
+
   return (
-    <button
-      className={`game-button ${isSelected ? "selected" : ""}`}
-      onClick={() => onSelect(game.id)}
-    >
-      {game.name}
-    </button>
+    <div className="">
+      {/* <button
+        className={`game-button game-button-large btn btn-lg btn-secondary ${disabled}`}
+        onClick={() => onSelect(game.id)}
+      > */}
+      <button
+        className={`game-button`}
+        onClick={() => onSelect(game.id)}
+        disabled={disabled}
+      >
+        {game.name}
+      </button>
+    </div>
   );
 }
 
