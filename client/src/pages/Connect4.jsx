@@ -3,9 +3,9 @@ import Connect4Col from "../components/Connect4Col";
 
 function Connect4() {
   const startingData = [
-    [0, 0, 0, 0, 1, 2],
-    [0, 0, 0, 2, 0, 0],
-    [0, 0, 0, 0, 1, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0],
