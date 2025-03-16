@@ -39,7 +39,7 @@ app.get("/*", (req, res) => {
 });
 
 io.on("connection", (socket) => {
-  console.log(`client with socket id ${socket.id} connected`);
+  //console.log(`client with socket id ${socket.id} connected`);
 
   let roomName = "";
   let gameRoom = new room();
@@ -98,7 +98,7 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     leaveRoom(roomName, socket);
-    console.log(`client with socket id ${socket.id} disconnected`);
+    //console.log(`client with socket id ${socket.id} disconnected`);
   });
 });
 

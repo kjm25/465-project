@@ -10,7 +10,7 @@ function Connect4Col({ col, data, turn }) {
       <div className="d-flex flex-column">
         <button
           className={`btn ${turn ? "btn-primary" : "disabled btn-dark"}`}
-          onClick={() => socket.emit("Connect4Drop", col)}
+          onClick={() => socket.emit("connect4Drop", col)}
         >
           Drop
         </button>
