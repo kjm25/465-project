@@ -35,7 +35,7 @@ const createConnect4 = async function (roomName, io, activeRoomList, room) {
         dbSendResult(emails[0], emails[1], "", "Connect4");
       } else if (gameState.winner === "Yellow") {
         dbSendResult(emails[1], emails[0], "", "Connect4");
-      } else if (gameState.winner === "draw") {
+      } else if (gameState.winner === "Draw") {
         dbSendResult(emails[0], emails[1], "Draw", "Connect4");
       }
     }
@@ -65,7 +65,7 @@ const createConnect4 = async function (roomName, io, activeRoomList, room) {
 };
 
 const gameWon = function (board) {
-  if (!board.some((col) => col.includes(0))) return "draw";
+  if (!board.some((col) => col.includes(0))) return "Draw";
 
   const checkDirection = function (col, row, deltaCol, deltaRow) {
     let lastToken = board[col][row];
@@ -114,19 +114,19 @@ const gameWon = function (board) {
     c += 1;
   }
   while (r <= 5) {
-    result = checkDirection(r, 0, 1, 1);
+    result = checkDirection(0, r, 1, 1);
     if (result != "") return result;
     r += 1;
   }
   c = 0;
   r = 0;
   while (c <= 6) {
-    result = checkDirection(c, 5, -1, -1);
+    result = checkDirection(c, 0, -1, 1);
     if (result != "") return result;
     c += 1;
   }
   while (r <= 5) {
-    result = checkDirection(r, 6, -1, -1);
+    result = checkDirection(6, r, -1, 1);
     if (result != "") return result;
     r += 1;
   }
