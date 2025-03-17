@@ -39,16 +39,34 @@ function Connect4() {
   return (
     <>
       <main className="d-flex justify-content-center">
-        <div className="d-flex">
-          <Connect4Col col={0} data={data[0]} turn={turn} />
-          <Connect4Col col={1} data={data[1]} turn={turn} />
-          <Connect4Col col={2} data={data[2]} turn={turn} />
-          <Connect4Col col={3} data={data[3]} turn={turn} />
-          <Connect4Col col={4} data={data[4]} turn={turn} />
-          <Connect4Col col={5} data={data[5]} turn={turn} />
-          <Connect4Col col={6} data={data[6]} turn={turn} />
+        <div>
+          <Connect4Header turn={turn} player0={player0}></Connect4Header>
+          <div className="d-flex">
+            <Connect4Col col={0} data={data[0]} turn={turn} />
+            <Connect4Col col={1} data={data[1]} turn={turn} />
+            <Connect4Col col={2} data={data[2]} turn={turn} />
+            <Connect4Col col={3} data={data[3]} turn={turn} />
+            <Connect4Col col={4} data={data[4]} turn={turn} />
+            <Connect4Col col={5} data={data[5]} turn={turn} />
+            <Connect4Col col={6} data={data[6]} turn={turn} />
+          </div>
         </div>
       </main>
+    </>
+  );
+}
+
+function Connect4Header({ turn, player0 }) {
+  const getColor = function (turn, player0) {
+    if (player0) return turn ? "text-danger" : "text-warning";
+    else return turn ? "text-warning" : "text-danger";
+  };
+
+  return (
+    <>
+      <h1 className={"text-center m-3 " + getColor(turn, player0)}>
+        {turn ? "Your turn" : "Opponent's turn"}
+      </h1>
     </>
   );
 }
