@@ -13,8 +13,8 @@ function Connect4() {
     [0, 0, 0, 0, 0, 0],
   ];
   const [data, setData] = useState(startingData);
-  const [turn, setTurn] = useState(true); //change to false
-  const [player0, setPlayer0] = useState(true);
+  const [turn, setTurn] = useState(false);
+  const [player0, setPlayer0] = useState(false);
   const [winner, setWinner] = useState("");
 
   useEffect(() => {
