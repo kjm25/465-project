@@ -7,7 +7,7 @@ import { socket } from "../socket.js";
 //create list of games to choose from with corresponding ID
 const games = [
   { id: 1, name: "Pong" },
-  { id: 2, name: "BattleShip" },
+  { id: 2, name: "Connect4" },
 ];
 
 function GameSelector() {
@@ -22,6 +22,9 @@ function GameSelector() {
     const roomID = generateRoomID();
     if (game_id == 1) {
       socket.emit("setGame", "pong");
+      socket.emit("joinRoom", roomID);
+    } else if (game_id == 2) {
+      socket.emit("setGame", "connect4");
       socket.emit("joinRoom", roomID);
     }
     navigate(`/lobby/${roomID}`, { state: { gameName: selectedGame } });

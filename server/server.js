@@ -7,16 +7,18 @@ const createPongGame = require("./games/Pong");
 const verify = require("./auth.js");
 const cookieLib = require("cookie");
 const { dbGetData, dbSendResult } = require("./database.js");
+const createConnect4 = require("./games/Connect4.js");
 require("dotenv").config();
 
 const port = process.env.PORT || 5001;
 
 const activeRoomList = [];
 class room {
-  constructor(numPlayers = 0, sockets = [], name = "") {
+  constructor(numPlayers = 0, sockets = [], name = "", gameType = "") {
     this.numPlayers = numPlayers;
     this.sockets = sockets;
     this.name = name;
+    this.gameType = gameType;
   }
 }
 
@@ -37,18 +39,17 @@ app.get("/*", (req, res) => {
 });
 
 io.on("connection", (socket) => {
-  console.log(`client with socket id ${socket.id} connected`);
+  //console.log(`client with socket id ${socket.id} connected`);
 
   let roomName = "";
-  let gameRoom = undefined;
-  let gameType = "";
+  let gameRoom = new room();
   socket.userEmail = signIn(socket);
 
   socket.on("joinRoom", (roomCode) => {
     if (roomName != "") leaveRoom(roomName, socket);
 
     roomName = roomCode;
-    gameRoom = joinRoom(roomName, socket);
+    gameRoom = joinRoom(roomName, socket, gameRoom);
     io.to(roomName).emit("lobbyCount", gameRoom.numPlayers);
   });
 
@@ -67,17 +68,25 @@ io.on("connection", (socket) => {
     }
 
     roomName = "";
-    gameRoom = undefined;
+    gameRoom = new room();
   });
 
-  socket.on("setGame", (game) => (gameType = game));
+  socket.on("setGame", (game) => {
+    gameRoom.gameType = game;
+  });
+  socket.on("getGame", () => {
+    socket.emit("sendGame", gameRoom.gameType);
+  });
   socket.on("startGame", () => {
     if (roomName != "") {
       //!activeRoomList.includes(roomName) &&
       //create game if not already created
-      if ((gameType = "pong")) {
+      if (gameRoom.gameType === "pong") {
         io.to(roomName).emit("pongStart");
         createPongGame(roomName, io, activeRoomList, gameRoom);
+      } else if (gameRoom.gameType === "connect4") {
+        io.to(roomName).emit("connect4Start");
+        createConnect4(roomName, io, activeRoomList, gameRoom);
       }
     }
   });
@@ -89,7 +98,7 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     leaveRoom(roomName, socket);
-    console.log(`client with socket id ${socket.id} disconnected`);
+    //console.log(`client with socket id ${socket.id} disconnected`);
   });
 });
 
@@ -97,11 +106,10 @@ server.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
 
-const joinRoom = function (roomName, socket) {
+const joinRoom = function (roomName, socket, newGame) {
   const roomIndex = activeRoomList.findIndex((room) => room.name === roomName);
   socket.join(roomName);
   if (roomIndex === -1) {
-    const newGame = new room();
     newGame.numPlayers += 1;
     newGame.sockets.push(socket);
     newGame.name = roomName;
@@ -109,6 +117,10 @@ const joinRoom = function (roomName, socket) {
     return newGame;
   } else {
     const currentGame = activeRoomList[roomIndex];
+    if (currentGame.sockets.length > 0 && currentGame.numPlayers == 0) {
+      //bugfix for losing player count somehow
+      currentGame.numPlayers = 1;
+    }
     currentGame.numPlayers += 1;
     currentGame.sockets.push(socket);
     return currentGame;

@@ -6,7 +6,7 @@ import "./Lobby.css";
 
 const gameConfigs = {
   pong: { name: "Pong", maxPlayers: 2 },
-  battleship: { name: "Battleship", maxPlayers: 2 },
+  connect4: { name: "Connect4", maxPlayers: 2 },
 };
 
 function Lobby() {
@@ -14,14 +14,29 @@ function Lobby() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // will need client logic to make this work
-  const gameName = location.state?.gameName || "Pong";
-  // const gameConfig =
-  //   gameConfigs[String(gameName).toLowerCase()] || gameConfigs.pong;
-  const gameConfig = gameConfigs.pong;
+  const [gameConfig, setGameConfig] = useState({
+    name: "Disconnected",
+    maxPlayers: 2,
+  });
   const [disabledClass, setDisabledClass] = useState("disabled btn-dark");
-
   const [players, setPlayers] = useState([1]);
+
+  // will need client logic to make this work
+  useEffect(() => {
+    //get game selection from server for configs
+    socket.on("sendGame", (gameName) => {
+      if (gameName === "pong") {
+        setGameConfig(gameConfigs.pong);
+      } else if (gameName === "connect4") {
+        setGameConfig(gameConfigs.connect4);
+      }
+    });
+    socket.emit("getGame");
+
+    return () => {
+      socket.removeAllListeners("sendGame");
+    };
+  }, []);
 
   const handleQuit = () => {
     socket.emit("leaveRoom");
@@ -40,16 +55,21 @@ function Lobby() {
       navigate(`/pong`);
     });
 
+    socket.on("connect4Start", () => {
+      navigate(`/connect4`);
+    });
+
     socket.on("lobbyCount", (count) => setPlayers(count));
 
     return () => {
       socket.removeAllListeners("pongStart");
+      socket.removeAllListeners("connect4Start");
       socket.removeAllListeners("lobbyCount");
-      navigate(`/pong`);
     };
   }, []);
 
   useEffect(() => {
+    //disable button if less than required players
     if (players >= gameConfig.maxPlayers) setDisabledClass("btn-success");
     else if (players < gameConfig.maxPlayers)
       setDisabledClass("disabled btn-dark");

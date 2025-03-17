@@ -6,6 +6,7 @@ import GameSelect from "./pages/GameSelect.jsx";
 import Join from "./pages/Join.jsx";
 import Lobby from "./pages/Lobby.jsx";
 import Profile from "./pages/Profile.jsx";
+import Connect4 from "./pages/Connect4.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -16,6 +17,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/pong" element={<Pong />} />
+          <Route path="/connect4" element={<Connect4 />} />
           <Route path="/gameselect" element={<GameSelect />} />
           <Route path="/join" element={<Join />}></Route>
           <Route path="/profile" element={<Profile />}></Route>

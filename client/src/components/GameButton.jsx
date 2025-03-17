@@ -3,11 +3,11 @@ import "./GameButton.css";
 
 function GameButton({ game, isSelected, onSelect }) {
   const [disabled, setDisabled] = useState(false);
-  //TODO remove disable on battleship if implemented
-  useEffect(() => {
-    if (game.name === "BattleShip") setDisabled(true);
-    else setDisabled(false);
-  }, [game]);
+
+  // useEffect(() => {
+  //   if (game.name === "BattleShip") setDisabled(true);
+  //   else setDisabled(false);
+  // }, [game]);
 
   return (
     <div className="">
