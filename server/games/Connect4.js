@@ -30,6 +30,15 @@ const createConnect4 = async function (roomName, io, activeRoomList, room) {
     else gameState.data[col][index - 1] = 2;
     gameState.player0Turn = !gameState.player0Turn;
     gameState.winner = gameWon(gameState.data);
+    if (emails[0] != "Anonymous Player" || emails[1] != "Anonymous Player") {
+      if (gameState.winner === "Red") {
+        dbSendResult(emails[0], emails[1], "", "Connect4");
+      } else if (gameState.winner === "Yellow") {
+        dbSendResult(emails[1], emails[0], "", "Connect4");
+      } else if (gameState.winner === "draw") {
+        dbSendResult(emails[0], emails[1], "Draw", "Connect4");
+      }
+    }
   };
 
   if (room.sockets.length == 2) {
@@ -37,6 +46,8 @@ const createConnect4 = async function (roomName, io, activeRoomList, room) {
     room.sockets[0].emit("connect4Player0", true);
     room.sockets[1].emit("connect4Player0", false);
     io.to(roomName).emit("connect4GameState", gameState);
+    //send again in case they get gameState before what player they are
+    setTimeout(() => io.to(roomName).emit("connect4GameState", gameState), 200);
 
     room.sockets[0].on("connect4Drop", (col) => {
       if (gameState.player0Turn) dropPiece(col);
@@ -69,8 +80,8 @@ const gameWon = function (board) {
       col += deltaCol;
       row += deltaRow;
       if (tokenCount >= 4) {
-        if (lastToken === 1) return "red";
-        else return "yellow";
+        if (lastToken === 1) return "Red";
+        else return "Yellow";
       }
     }
     return "";

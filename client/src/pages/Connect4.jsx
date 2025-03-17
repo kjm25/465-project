@@ -21,6 +21,11 @@ function Connect4() {
     socket.on("connect4GameState", (gameState) => {
       setData(gameState.data);
       setTurn(gameState.player0Turn === player0);
+      setWinner(gameState.winner);
+      if (gameState.winner !== "") {
+        setTurn(false);
+        setTimeout(socket.emit("leaveRoom"), 200);
+      }
     });
 
     return () => {
@@ -40,7 +45,11 @@ function Connect4() {
     <>
       <main className="d-flex justify-content-center">
         <div>
-          <Connect4Header turn={turn} player0={player0}></Connect4Header>
+          <Connect4Header
+            turn={turn}
+            player0={player0}
+            winner={winner}
+          ></Connect4Header>
           <div className="d-flex">
             <Connect4Col col={0} data={data[0]} turn={turn} />
             <Connect4Col col={1} data={data[1]} turn={turn} />
@@ -56,11 +65,27 @@ function Connect4() {
   );
 }
 
-function Connect4Header({ turn, player0 }) {
+function Connect4Header({ turn, player0, winner }) {
   const getColor = function (turn, player0) {
     if (player0) return turn ? "text-danger" : "text-warning";
     else return turn ? "text-warning" : "text-danger";
   };
+
+  if (winner !== "") {
+    return (
+      <>
+        <h1 className="text-center m-3 ">{`${winner} Wins!`}</h1>
+        <div className="d-flex justify-content-center">
+          <button
+            className="btn btn-lg btn-success m-2 "
+            onClick={() => window.location.replace("/")}
+          >
+            Return to Menu
+          </button>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
